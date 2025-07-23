@@ -1,4 +1,4 @@
-name: Python Package
+name: Build and Publish Python Package
 
 on:
   push:
@@ -7,30 +7,48 @@ on:
     types: [ created ]
 
 jobs:
-  build-and-publish:
+  # --- Job 1: 构建和测试 ---
+  build:
     runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.x'
+
+      - name: Install dependencies and build package
+        run: |
+          # 运行你的构建脚本
+          bash run.sh
+      
+      - name: Upload artifact
+        # 将构建产物（dist目录）上传，以便发布任务使用
+        uses: actions/upload-artifact@v4
+        with:
+          name: python-package
+          path: ./dist
+
+  # --- Job 2: 发布到 PyPI ---
+  publish:
+    # 仅在创建 release 时运行
+    if: github.event_name == 'release' && github.event.action == 'created'
+    # 依赖 build 任务成功完成
+    needs: build
+    runs-on: ubuntu-latest
+    
+    # 关键：为任务授予写 OIDC token 的权限，用于受信发布
+    permissions:
+      id-token: write
 
     steps:
-    - uses: actions/checkout@v4
-
-    - name: Set up Python
-      uses: actions/setup-python@v5
-      with:
-        python-version: '3.x'
-
-    - name: Install dependencies and build package
-      run: |
-        bash run.sh
-
-    - name: Upload artifact
-      uses: actions/upload-artifact@v4
-      with:
-        name: dist
-        path: dist/
-
-    - name: Publish to PyPI
-      if: github.event_name == 'release' && github.event.action == 'created'
-      uses: pypa/gh-action-pypi-publish@release/v1
-      with:
-        user: colorblank
-        password: ${{ secrets.PYPI_API_TOKEN }}
+      - name: Download artifact from build job
+        # 下载构建任务上传的产物
+        uses: actions/download-artifact@v4
+        with:
+          name: python-package
+          path: ./dist
+      
+      - name: Publish to PyPI
+        uses: pypa/gh-action-pypi-publish@release/v1
+        # 注意：这里不再需要 user 和 password
