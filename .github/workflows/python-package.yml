@@ -32,5 +32,5 @@ jobs:
       if: github.event_name == 'release' && github.event.action == 'created'
       uses: pypa/gh-action-pypi-publish@release/v1
       with:
-        user: __token__
+        user: colorblank
         password: ${{ secrets.PYPI_API_TOKEN }}
