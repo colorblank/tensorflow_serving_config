@@ -3,7 +3,7 @@ import setuptools
 import os
 
 # Get the version from the environment variable set by the GitHub workflow
-version = os.getenv("RELEASE_VERSION", "0.0.1")
+version = os.getenv("RELEASE_VERSION", "0.0.2")
 
 setuptools.setup(
     name="tensorflow_serving_config",

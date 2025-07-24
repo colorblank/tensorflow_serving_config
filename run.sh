@@ -34,7 +34,7 @@ python -m grpc_tools.protoc \
        --python_out=./src \
        ./tmp/tensorflow_serving/config/*.proto 
 
-echo '__version__ = "0.0.1"' > src/tensorflow_serving/config/__init__.py
+echo '__version__ = "0.0.2"' > src/tensorflow_serving/config/__init__.py
 # Clean up temporary directories
 rm -rf tmp proto_source
 
