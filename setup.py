@@ -19,13 +19,13 @@ setuptools.setup(
     package_dir={'': 'src'},
     # The generated files depend on these packages
     install_requires=[
-        "grpcio>=1.73.1",
-        "protobuf>=6.31.1",
+        "grpcio>=1.64.1",
+        "protobuf>=4.25.3",
     ],
     classifiers=[
         "Programming Language :: Python :: 3",
         "License :: OSI Approved :: Apache Software License",
         "Operating System :: OS Independent",
     ],
-    python_requires='>=3.8',
+    python_requires='>=3.9',
 )

@@ -41,6 +41,8 @@ rm -rf tmp proto_source
 # Install the package in editable mode
 pip install -e .
 
+# python from tensorflow_serving.config import model_server_config_pb2
+python -c "import tensorflow_serving.config.model_server_config_pb2 as msc; print("build successfully")"
 # Run the comprehensive test script
 python test.py
 # Add src to PYTHONPATH for local development/testing
